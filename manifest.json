@@ -1,0 +1,12 @@
+{
+	"manifest_version": 2,
+	"name": "Syllabus Agent",
+	"version": "1.0",
+	"description": "Syllabus Agent for HIT Students, easy to import your classtable into Google Calendar.",
+	"content_scripts": [
+		{
+			"matches": ["http://xscj.hit.edu.cn/hitjwgl/xs/kbcx_bx.asp"],
+			"js": ["js/main.js"]
+		}
+	]
+}
