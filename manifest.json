@@ -5,7 +5,7 @@
 	"description": "Syllabus Agent for HIT Students, easy to import your classtable into Google Calendar.",
 	"content_scripts": [
 		{
-			"matches": ["http://xscj.hit.edu.cn/hitjwgl/xs/kbcx_bx.asp"],
+			"matches": ["http://xscj.hit.edu.cn/hitjwgl/xs/kbcx_bx.asp", "http://clop.hit.edu.cn/listBookingInfos.action"],
 			"js": ["js/main.js"]
 		}
 	]
