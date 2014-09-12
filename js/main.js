@@ -78,7 +78,9 @@ function classtable_parse(doc, semester_begin_time, csv_content) {
 							var week_base = (j-1)*604800000+semester_begin_time;
 							var start_d = new Date(week_base+start_time);
 							var end_d = new Date(week_base+end_time);
-							csv_content += c_name+','+start_d.toLocaleString().replace(" ",",")+','+end_d.toLocaleString().replace(" ",",")+','+'False,\"授课教师:'+teacher+'\",\"'+location+'\",True\n';
+							// Hacking fucking different language
+							// csv_content += c_name+','+start_d.toLocaleString().replace(" ",",")+','+end_d.toLocaleString().replace(" ",",")+','+'False,\"授课教师:'+teacher+'\",\"'+location+'\",True\n';
+							csv_content += c_name+','+(start_d.getMonth()+1)+'/'+start_d.getDate()+'/'+start_d.getFullYear()+','+start_d.getHours()%12+':'+('0'+start_d.getMinutes()).slice(-2)+':'+('0'+start_d.getSeconds()).slice(-2)+' '+(start_d.getHours()<12?"AM":"PM")+','+(end_d.getMonth()+1)+'/'+end_d.getDate()+'/'+end_d.getFullYear()+','+end_d.getHours()%12+':'+('0'+end_d.getMinutes()).slice(-2)+':'+('0'+end_d.getSeconds()).slice(-2)+' '+(end_d.getHours()<12?"AM":"PM")+','+'False,\"授课教师:'+teacher+'\",\"'+location+'\",True\n';
 						};
 					}
 				};
@@ -144,7 +146,8 @@ function clop_parse(doc, semester_begin_time, csv_content) {
 			// Generate CSV Code below
 			var start_d = new Date(start_time);
 			var end_d = new Date(end_time);
-			csv_content += c_name+','+start_d.toLocaleString().replace(" ",",")+','+end_d.toLocaleString().replace(" ",",")+','+'False,\"座位号:'+c_seat+'\",\"'+c_location+'\",True\n';
+			// csv_content += c_name+','+start_d.toLocaleString().replace(" ",",")+','+end_d.toLocaleString().replace(" ",",")+','+'False,\"座位号:'+c_seat+'\",\"'+c_location+'\",True\n';
+			csv_content += c_name+','+(start_d.getMonth()+1)+'/'+start_d.getDate()+'/'+start_d.getFullYear()+','+start_d.getHours()%12+':'+('0'+start_d.getMinutes()).slice(-2)+':'+('0'+start_d.getSeconds()).slice(-2)+' '+(start_d.getHours()<12?"AM":"PM")+','+(end_d.getMonth()+1)+'/'+end_d.getDate()+'/'+end_d.getFullYear()+','+end_d.getHours()%12+':'+('0'+end_d.getMinutes()).slice(-2)+':'+('0'+end_d.getSeconds()).slice(-2)+' '+(end_d.getHours()<12?"AM":"PM")+','+'False,\"座位号:'+c_seat+'\",\"'+c_location+'\",True\n';
 		};
 	};
 	download("clop.csv", csv_content);
