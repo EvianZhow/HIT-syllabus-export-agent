@@ -57,7 +57,14 @@ function classtable_parse(doc, semester_begin_time, csv_content) {
 			};
 		};
 	};
-	alert(csv_content);
+	download("classtable.csv", csv_content);
+}
+
+function download(filename, text) {
+    var pom = document.createElement('a');
+    pom.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+    pom.setAttribute('download', filename);
+    pom.click();
 }
 
 function parse() {
