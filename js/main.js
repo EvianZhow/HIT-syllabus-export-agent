@@ -181,9 +181,9 @@ function registered_parse(doc, semester_begin_time, csv_content, type) {
 			var tls = c_tl.querySelectorAll('table > tbody > tr');
 			for (var j = 0; j < tls.length; j++) {
 				///^(单|双)?((\p{Han}+)([\d]+)-([\d]+).*节)\s?((\p{Han}+|[\w]+)([\d]+))?$/
-				var match = /^(单?)周(.)(\d+-\d+).*节\s+(.+$)/.exec(tls[j].querySelector('td').textContent).reverse();
-				var c_location = match[0];
-				if (match[3] == "单") {
+				var match = /^(单?)周(.)(\d+-\d+).*节(\s+(.+$))?/.exec(tls[j].querySelector('td').textContent).reverse();
+				var c_location = match[0] == undefined ? "网上查询" : match[0];
+				if (match[4] == "单") {
 					var step = 2;
 				} else {
 					var step = 1;
@@ -193,7 +193,7 @@ function registered_parse(doc, semester_begin_time, csv_content, type) {
 					var start_time = 0;
 					var end_time = 0;
 					if (/(实践|实验)+/.test(c_name)) {
-						switch (match[1]) {
+						switch (match[2]) {
 							case "1-2":
 								start_time += 26400000;
 								end_time += 35400000;
@@ -218,7 +218,7 @@ function registered_parse(doc, semester_begin_time, csv_content, type) {
 								break;
 						}
 					} else {
-						switch (match[1]) {
+						switch (match[2]) {
 							case "1-2":
 								start_time += 28800000;
 								end_time += 35100000;
@@ -235,15 +235,15 @@ function registered_parse(doc, semester_begin_time, csv_content, type) {
 								start_time += 56700000;
 								end_time += 63000000;
 								break;
-							case "9-10":
+							case "9-11":
 								start_time += 66600000;
-								end_time += 75600000;
+								end_time += 73800000;
 								break;
 							default:
 								break;
 						}
 					}
-					switch (match[2]) {
+					switch (match[3]) {
 						case "一":
 							start_time += 0;
 							end_time += 0;
@@ -263,6 +263,14 @@ function registered_parse(doc, semester_begin_time, csv_content, type) {
 						case "五":
 							start_time += 86400000*4;
 							end_time += 86400000*4;
+							break;
+						case "六":
+							start_time += 86400000*5;
+							end_time += 86400000*5;
+							break;
+						case "日":
+							start_time += 86400000*6;
+							end_time += 86400000*6;
 							break;
 						default:
 							break;
