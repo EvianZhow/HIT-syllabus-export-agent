@@ -8,7 +8,7 @@
         	"128": "img/icon128.png" },
 	"content_scripts": [
 		{
-			"matches": ["http://xscj.hit.edu.cn/hitjwgl/xs/kbcx_bx.asp", "http://clop.hit.edu.cn/listBookingInfos.action"],
+			"matches": ["http://xscj.hit.edu.cn/hitjwgl/xs/kbcx_bx.asp", "http://clop.hit.edu.cn/listBookingInfos.action", "http://xscj.hit.edu.cn/hitjwgl/xs/kcxx/CXJG.asp"],
 			"js": ["js/main.js"]
 		}
 	]
