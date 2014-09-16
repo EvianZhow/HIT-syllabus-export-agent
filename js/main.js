@@ -239,6 +239,14 @@ function registered_parse(doc, semester_begin_time, csv_content, type) {
 								start_time += 66600000;
 								end_time += 73800000;
 								break;
+							case "1-4":
+								start_time += 28800000;
+								end_time += 42300000;
+								break;
+							case "5-8":
+								start_time += 49500000;
+								end_time += 63000000;
+								break;
 							default:
 								break;
 						}
