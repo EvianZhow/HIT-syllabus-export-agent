@@ -7,7 +7,7 @@
         	"128": "img/icon128.png" },
 	"content_scripts": [
 		{
-			"matches": ["http://jwts.hit.edu.cn/kbcx/queryGrkb", "http://clop.hit.edu.cn/listBookingInfos.action"],
+			"matches": ["http://jwts.hit.edu.cn/kbcx/queryGrkb", "http://jwts.hit.edu.cn/kbcx/queryXskb", "http://clop.hit.edu.cn/listBookingInfos.action"],
 			"all_frames": true,
 			"js": ["js/main.js"]
 		}
