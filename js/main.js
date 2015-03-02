@@ -4,82 +4,84 @@ function grkb_parse(doc, semester_begin_time, csv_content) {
     for (var row = 2; row <= 7; row++) {
       for (var col = 3; col <= 9; col++) {
         var cell = table.querySelector('tr:nth-child('+row+') > td:nth-child('+col+')');
-        var match = /(.+?)(\(实验\))?◇(.+)?\[(\d+(?:-\d+)?)周\](.+)/.exec(cell.textContent);
-        if (match != null) {
-          var c_name = match[1];
-          var c_teacher = match[3]; if (c_teacher == null) { c_teacher = "无" }
-          var startWeek = match[4].split("-")[0]; startWeek = Number(startWeek);
-          var endWeek = match[4].split("-")[1]; if (endWeek == null) { endWeek = startWeek } else { endWeek = Number(endWeek) };
-          var c_location = match[5];
+        cell.textContent.split('\n\t').forEach(function(entry) {
+          var match = /(.+?)(\(实验\))?◇(.+)?\[(\d+(?:-\d+)?)周\](.+)/.exec(entry);
+          if (match != null) {
+            var c_name = match[1];
+            var c_teacher = match[3]; if (c_teacher == null) { c_teacher = "无" }
+            var startWeek = match[4].split("-")[0]; startWeek = Number(startWeek);
+            var endWeek = match[4].split("-")[1]; if (endWeek == null) { endWeek = startWeek } else { endWeek = Number(endWeek) };
+            var c_location = match[5];
 
-          var start_time = (col-3)*86400000;
-          var end_time = (col-3)*86400000;
+            var start_time = (col-3)*86400000;
+            var end_time = (col-3)*86400000;
 
-          if (match[2] != null) {
-            // 实验课
-            switch (row-1) {
-              case 1:
-                start_time += 26400000;
-                end_time += 35400000;
-                break;
-              case 2:
-                start_time += 36000000;
-                end_time += 45000000;
-                break;
-              case 3:
-                start_time += 46800000;
-                end_time += 55800000;
-                break;
-              case 4:
-                start_time += 56400000;
-                end_time += 65400000;
-                break;
-              case 5:
-                start_time += 66600000;
-                end_time += 75600000;
-                break;
-              default:
-                break;
+            if (match[2] != null) {
+              // 实验课
+              switch (row-1) {
+                case 1:
+                  start_time += 26400000;
+                  end_time += 35400000;
+                  break;
+                case 2:
+                  start_time += 36000000;
+                  end_time += 45000000;
+                  break;
+                case 3:
+                  start_time += 46800000;
+                  end_time += 55800000;
+                  break;
+                case 4:
+                  start_time += 56400000;
+                  end_time += 65400000;
+                  break;
+                case 5:
+                  start_time += 66600000;
+                  end_time += 75600000;
+                  break;
+                default:
+                  break;
+              }
+            } else {
+              // 正常课程
+              switch (row-1) {
+                case 1:
+                  start_time += 28800000;
+                  end_time += 35100000;
+                  break;
+                case 2:
+                  start_time += 36000000;
+                  end_time += 42300000;
+                  break;
+                case 3:
+                  start_time += 49500000;
+                  end_time += 55800000;
+                  break;
+                case 4:
+                  start_time += 56700000;
+                  end_time += 63000000;
+                  break;
+                case 5:
+                  start_time += 66600000;
+                  end_time += 75600000;
+                  break;
+                case 6:
+                  start_time += 73800000;
+                  end_time += 80100000;
+                  break;
+                default:
+                  break;
+              }
             }
-          } else {
-            // 正常课程
-            switch (row-1) {
-              case 1:
-                start_time += 28800000;
-                end_time += 35100000;
-                break;
-              case 2:
-                start_time += 36000000;
-                end_time += 42300000;
-                break;
-              case 3:
-                start_time += 49500000;
-                end_time += 55800000;
-                break;
-              case 4:
-                start_time += 56700000;
-                end_time += 63000000;
-                break;
-              case 5:
-                start_time += 66600000;
-                end_time += 75600000;
-                break;
-              case 6:
-                start_time += 73800000;
-                end_time += 80100000;
-                break;
-              default:
-                break;
+
+            for (var w = startWeek; w <= endWeek; w+=1) {
+              var week_base = (w-1)*604800000+semester_begin_time;
+              var start_d = new Date(week_base+start_time);
+              var end_d = new Date(week_base+end_time);
+              csv_content += c_name+','+(start_d.getMonth()+1)+'/'+start_d.getDate()+'/'+start_d.getFullYear()+','+start_d.getHours()%12+':'+('0'+start_d.getMinutes()).slice(-2)+':'+('0'+start_d.getSeconds()).slice(-2)+' '+(start_d.getHours()<12?"AM":"PM")+','+(end_d.getMonth()+1)+'/'+end_d.getDate()+'/'+end_d.getFullYear()+','+end_d.getHours()%12+':'+('0'+end_d.getMinutes()).slice(-2)+':'+('0'+end_d.getSeconds()).slice(-2)+' '+(end_d.getHours()<12?"AM":"PM")+','+'False,\"授课教师:'+c_teacher+'\",\"'+c_location+'\",True\n';
             }
           }
-
-          for (var w = startWeek; w <= endWeek; w+=1) {
-            var week_base = (w-1)*604800000+semester_begin_time;
-            var start_d = new Date(week_base+start_time);
-            var end_d = new Date(week_base+end_time);
-            csv_content += c_name+','+(start_d.getMonth()+1)+'/'+start_d.getDate()+'/'+start_d.getFullYear()+','+start_d.getHours()%12+':'+('0'+start_d.getMinutes()).slice(-2)+':'+('0'+start_d.getSeconds()).slice(-2)+' '+(start_d.getHours()<12?"AM":"PM")+','+(end_d.getMonth()+1)+'/'+end_d.getDate()+'/'+end_d.getFullYear()+','+end_d.getHours()%12+':'+('0'+end_d.getMinutes()).slice(-2)+':'+('0'+end_d.getSeconds()).slice(-2)+' '+(end_d.getHours()<12?"AM":"PM")+','+'False,\"授课教师:'+c_teacher+'\",\"'+c_location+'\",True\n';
-          }
-        }
+        });
       }
     }
     download("grkb.csv", csv_content);
