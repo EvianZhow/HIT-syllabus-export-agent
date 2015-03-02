@@ -15,5 +15,3 @@ Syllabus Agent for HIT Students, easy to import your classtable into Google Cale
 旧版教务处请浏览 https://github.com/AustinChou/HIT-Syllabus-Agent/tree/deprecated 分支
 
 ## To-do
-
-- 班级推荐课表支持
