@@ -256,7 +256,7 @@ function download(filename, text) {
 
 function parse() {
   // Should be improved
-  var d = new Date(2015,2,2); // Be careful with this 
+  var d = new Date(2015, 7-1, 6); // Be careful with this 
   switch (document.URL) {
   case "http://jwts.hit.edu.cn/kbcx/queryGrkb":
     grkb_parse(document, d.getTime(), "Subject,Start Date,Start Time,End Date,End Time,All Day Event,Description,Location,Private\n");
