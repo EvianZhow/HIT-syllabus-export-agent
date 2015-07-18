@@ -1,6 +1,10 @@
 # HIT-Syllabus-Agent
 Syllabus Agent for HIT Students, easy to import your classtable into Google Calendar.
 
+## New Feature in v2.2
+
+We added a **Generate ICS File** button to let you directly import [ICS](https://en.wikipedia.org/wiki/ICalendar) file into your calendar app! Long live open source!
+
 ## Usage
 
 1. Install `HIT Syllabus Agent` in your Chrome browser.
