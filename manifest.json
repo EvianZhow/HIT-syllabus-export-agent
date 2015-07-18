@@ -9,7 +9,7 @@
 		{
 			"matches": ["http://jwts.hit.edu.cn/kbcx/queryGrkb", "http://jwts.hit.edu.cn/kbcx/queryXskb", "http://clop.hit.edu.cn/listBookingInfos.action"],
 			"all_frames": true,
-			"js": ["js/main.js"]
+			"js": ["js/main.js", "js/ics.min.js", "js/FileSaver.min.js", "js/Blob.js"]
 		}
 	]
 }

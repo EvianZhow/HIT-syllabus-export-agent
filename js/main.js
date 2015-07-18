@@ -1,4 +1,4 @@
-function grkb_parse(doc, semester_begin_time, csv_content) {
+function grkb_parse(doc, semester_begin_time, callback) {
   var table = doc.querySelector('body > div > div > div.xfyq_area.mt10 > div.xfyq_con > table > tbody');
   if (table != null) {
     for (var row = 2; row <= 7; row++) {
@@ -78,19 +78,24 @@ function grkb_parse(doc, semester_begin_time, csv_content) {
               var week_base = (w-1)*604800000+semester_begin_time;
               var start_d = new Date(week_base+start_time);
               var end_d = new Date(week_base+end_time);
-              csv_content += c_name+','+(start_d.getMonth()+1)+'/'+start_d.getDate()+'/'+start_d.getFullYear()+','+start_d.getHours()%12+':'+('0'+start_d.getMinutes()).slice(-2)+':'+('0'+start_d.getSeconds()).slice(-2)+' '+(start_d.getHours()<12?"AM":"PM")+','+(end_d.getMonth()+1)+'/'+end_d.getDate()+'/'+end_d.getFullYear()+','+end_d.getHours()%12+':'+('0'+end_d.getMinutes()).slice(-2)+':'+('0'+end_d.getSeconds()).slice(-2)+' '+(end_d.getHours()<12?"AM":"PM")+','+'False,\"授课教师:'+c_teacher+'\",\"'+c_location+'\",True\n';
+              callback({
+                'name': c_name,
+                'start_date': start_d,
+                'end_date': end_d,
+                'teacher': c_teacher,
+                'location': c_location
+              })
             }
           }
         });
       }
     }
-    download("grkb.csv", csv_content);
   } else {
     alert('Error loading tables!');
   }
 }
 
-function xskb_parse(doc, semester_begin_time, csv_content) {
+function xskb_parse(doc, semester_begin_time, callback) {
   var table = doc.querySelector('body > div > div > div.xfyq_area > div.xfyq_con > table > tbody');
   if (table != null) {
     for (var row = 2; row <= 7; row++) {
@@ -170,19 +175,24 @@ function xskb_parse(doc, semester_begin_time, csv_content) {
               var week_base = (w-1)*604800000+semester_begin_time;
               var start_d = new Date(week_base+start_time);
               var end_d = new Date(week_base+end_time);
-              csv_content += c_name+','+(start_d.getMonth()+1)+'/'+start_d.getDate()+'/'+start_d.getFullYear()+','+start_d.getHours()%12+':'+('0'+start_d.getMinutes()).slice(-2)+':'+('0'+start_d.getSeconds()).slice(-2)+' '+(start_d.getHours()<12?"AM":"PM")+','+(end_d.getMonth()+1)+'/'+end_d.getDate()+'/'+end_d.getFullYear()+','+end_d.getHours()%12+':'+('0'+end_d.getMinutes()).slice(-2)+':'+('0'+end_d.getSeconds()).slice(-2)+' '+(end_d.getHours()<12?"AM":"PM")+','+'False,\"授课教师:'+c_teacher+'\",\"'+c_location+'\",True\n';
+              callback({
+                'name': c_name,
+                'start_date': start_d,
+                'end_date': end_d,
+                'teacher': c_teacher,
+                'location': c_location
+              })
             }
           }
         });
       }
     }
-    download("xskb.csv", csv_content);
   } else {
     alert('Error loading tables!');
   }
 }
 
-function clop_parse(doc, semester_begin_time, csv_content) {
+function clop_parse(doc, semester_begin_time, callback) {
   var table = doc.querySelector('body > div > div.middle > div.right > div > div > div.table-container > table > tbody');
   if (table.querySelectorAll('tr') != null) {
     for (var row = 1; row <= table.querySelectorAll('tr').length; row++) {
@@ -235,16 +245,19 @@ function clop_parse(doc, semester_begin_time, csv_content) {
         default:
           break;
       };
-      // Generate CSV Code below
       var start_d = new Date(start_time);
       var end_d = new Date(end_time);
-      // csv_content += c_name+','+start_d.toLocaleString().replace(" ",",")+','+end_d.toLocaleString().replace(" ",",")+','+'False,\"座位号:'+c_seat+'\",\"'+c_location+'\",True\n';
-      csv_content += c_name+','+(start_d.getMonth()+1)+'/'+start_d.getDate()+'/'+start_d.getFullYear()+','+start_d.getHours()%12+':'+('0'+start_d.getMinutes()).slice(-2)+':'+('0'+start_d.getSeconds()).slice(-2)+' '+(start_d.getHours()<12?"AM":"PM")+','+(end_d.getMonth()+1)+'/'+end_d.getDate()+'/'+end_d.getFullYear()+','+end_d.getHours()%12+':'+('0'+end_d.getMinutes()).slice(-2)+':'+('0'+end_d.getSeconds()).slice(-2)+' '+(end_d.getHours()<12?"AM":"PM")+','+'False,\"座位号:'+c_seat+'\",\"'+c_location+'\",True\n';
+      callback({
+        'name': c_name,
+        'start_date': start_d,
+        'end_date': end_d,
+        'teacher': c_teacher,
+        'location': c_location
+      })
     };
   } else {
     alert('Error loading tables!');
   }
-  download("clop.csv", csv_content);
 }
 
 function download(filename, text) {
@@ -257,27 +270,78 @@ function download(filename, text) {
 function parse() {
   // Should be improved
   var d = new Date(2015, 7-1, 6); // Be careful with this 
+  var csv_header = "Subject,Start Date,Start Time,End Date,End Time,All Day Event,Description,Location,Private\n";
+  var csv_content = csv_header;
+  var callback = function(object) {
+    var c_name = object['name'];
+    var start_d = object['start_date'];
+    var end_d = object['end_date'];
+    var c_teacher = object['teacher'];
+    var c_location = object['location'];
+    csv_content += c_name+','+(start_d.getMonth()+1)+'/'+start_d.getDate()+'/'+start_d.getFullYear()+','+start_d.getHours()%12+':'+('0'+start_d.getMinutes()).slice(-2)+':'+('0'+start_d.getSeconds()).slice(-2)+' '+(start_d.getHours()<12?"AM":"PM")+','+(end_d.getMonth()+1)+'/'+end_d.getDate()+'/'+end_d.getFullYear()+','+end_d.getHours()%12+':'+('0'+end_d.getMinutes()).slice(-2)+':'+('0'+end_d.getSeconds()).slice(-2)+' '+(end_d.getHours()<12?"AM":"PM")+','+'False,\"授课教师:'+c_teacher+'\",\"'+c_location+'\",True\n';
+  }
   switch (document.URL) {
   case "http://jwts.hit.edu.cn/kbcx/queryGrkb":
-    grkb_parse(document, d.getTime(), "Subject,Start Date,Start Time,End Date,End Time,All Day Event,Description,Location,Private\n");
+    grkb_parse(document, d.getTime(), callback);
     break;
   case "http://jwts.hit.edu.cn/kbcx/queryXskb":
-    xskb_parse(document, d.getTime(), "Subject,Start Date,Start Time,End Date,End Time,All Day Event,Description,Location,Private\n");
+    xskb_parse(document, d.getTime(), callback);
     break;
   case "http://clop.hit.edu.cn/listBookingInfos.action":
-    clop_parse(document, d.getTime(), "Subject,Start Date,Start Time,End Date,End Time,All Day Event,Description,Location,Private\n");
+    clop_parse(document, d.getTime(), callback);
     break;
   }
+  download("classtable.csv", csv_content);
+}
+
+function parse_ics() {
+  var d = new Date(2015, 7-1, 6); // Be careful with this 
+  var cal = ics();
+  var callback = function(object) {
+    var c_name = object['name'];
+    var start_d = object['start_date'];
+    var end_d = object['end_date'];
+    var c_teacher = object['teacher'];
+    var c_location = object['location'];
+    cal.addEvent(c_name, 
+      "授课教师:"+c_teacher, 
+      c_location, 
+      (start_d.getMonth()+1)+'/'+start_d.getDate()+'/'+start_d.getFullYear()+' '+start_d.getHours()%12+':'+('0'+start_d.getMinutes()).slice(-2)+' '+(start_d.getHours()<12?"am":"pm"),
+      (end_d.getMonth()+1)+'/'+end_d.getDate()+'/'+end_d.getFullYear()+' '+end_d.getHours()%12+':'+('0'+end_d.getMinutes()).slice(-2)+' '+(end_d.getHours()<12?"am":"pm")
+      );
+  }
+  switch (document.URL) {
+  case "http://jwts.hit.edu.cn/kbcx/queryGrkb":
+    grkb_parse(document, d.getTime(), callback);
+    break;
+  case "http://jwts.hit.edu.cn/kbcx/queryXskb":
+    xskb_parse(document, d.getTime(), callback);
+    break;
+  case "http://clop.hit.edu.cn/listBookingInfos.action":
+    clop_parse(document, d.getTime(), callback);
+    break;
+  }
+  cal.download("classtable");
 }
 
 function insert_btn(node) {
   var element = document.createElement("button");
   element.setAttribute("name", "generate_csv");
   element.setAttribute("id", "csv_btn");
-  element.innerText = "生成CSV文件";
+  element.innerText = "生成 CSV 文件";
   // append to node
   node.appendChild(element);
   document.getElementById('csv_btn').addEventListener("click", parse, false);
+}
+
+function insert_btn_ics(node) {
+  var element = document.createElement("button");
+  element.setAttribute("name", "generate_ics");
+  element.setAttribute("id", "ics_btn");
+  element.innerText = "生成 iCal 文件";
+  // append to node
+  node.appendChild(element);
+  document.getElementById('ics_btn').addEventListener("click", parse_ics, false);
 }
 
 function insert_td(node) {
@@ -289,7 +353,7 @@ function insert_td(node) {
   element.setAttribute("name", "generate_csv");
   element.setAttribute("id", "csv_btn");
   var text = document.createElement("span");
-  text.innerText = "生成CSV文件";
+  text.innerText = "生成 CSV 文件";
   // td > div > a > span
   element.appendChild(text);
   div.appendChild(element);
@@ -299,16 +363,37 @@ function insert_td(node) {
   document.getElementById('csv_btn').addEventListener("click", parse, false);
 }
 
+function insert_td_ics(node) {
+  var td = document.createElement("td");
+  var div = document.createElement("div");
+  div.setAttribute("class", "addlist_button1 ml15");
+  var element = document.createElement("a");
+  element.setAttribute("href", "javascript:void(0);");
+  element.setAttribute("name", "generate_ics");
+  element.setAttribute("id", "ics_btn");
+  var text = document.createElement("span");
+  text.innerText = "生成 iCal 文件";
+  // td > div > a > span
+  element.appendChild(text);
+  div.appendChild(element);
+  td.appendChild(div);
+  // append to node
+  node.appendChild(td);
+  document.getElementById('ics_btn').addEventListener("click", parse_ics, false);
+}
+
 switch (document.URL) {
 case "http://jwts.hit.edu.cn/kbcx/queryXskb":
 case "http://jwts.hit.edu.cn/kbcx/queryGrkb":
   if (document.querySelector("#queryform > table > tbody > tr") != null) {
     insert_td(document.querySelector("#queryform > table > tbody > tr"));
+    insert_td_ics(document.querySelector("#queryform > table > tbody > tr"));
   }
   break;
 case "http://clop.hit.edu.cn/listBookingInfos.action":
   if (document.querySelector('body > div > div.middle > div.right > div') != null) {
     insert_btn(document.querySelector('body > div > div.middle > div.right > div'));
+    insert_btn_ics(document.querySelector('body > div > div.middle > div.right > div'));
   }
   break;
 }
