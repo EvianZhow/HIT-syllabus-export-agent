@@ -1,8 +1,8 @@
 {
 	"manifest_version": 2,
 	"name": "HIT Syllabus Agent",
-	"version": "2.2",
-	"description": "Syllabus Agent for HIT Students, easy to import your classtable into Google Calendar.",
+	"version": "2.2.1",
+	"description": "Syllabus Agent for HIT students, easily import your classtable into Google Calendar.",
 	"icons": {
         	"128": "img/icon128.png" },
 	"content_scripts": [
