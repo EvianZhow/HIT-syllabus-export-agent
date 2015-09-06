@@ -269,7 +269,7 @@ function download(filename, text) {
 
 function parse() {
   // Should be improved
-  var d = new Date(2015, 7-1, 6); // Be careful with this 
+  var d = new Date(2015, 9-1, 14); // Be careful with this 
   var csv_header = "Subject,Start Date,Start Time,End Date,End Time,All Day Event,Description,Location,Private\n";
   var csv_content = csv_header;
   var callback = function(object) {
