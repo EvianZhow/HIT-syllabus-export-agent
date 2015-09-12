@@ -295,7 +295,7 @@ function parse() {
 }
 
 function parse_ics() {
-  var d = new Date(2015, 7-1, 6); // Be careful with this 
+  var d = new Date(2015, 9-1, 14); // Be careful with this 
   var cal = ics();
   var callback = function(object) {
     var c_name = object['name'];
