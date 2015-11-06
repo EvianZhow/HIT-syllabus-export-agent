@@ -4,8 +4,10 @@ function grkb_parse(doc, semester_begin_time, callback) {
     for (var row = 2; row <= 7; row++) {
       for (var col = 3; col <= 9; col++) {
         var cell = table.querySelector('tr:nth-child('+row+') > td:nth-child('+col+')');
-        cell.textContent.split('\n\t').forEach(function(entry) {
-          var match = /(.+?)(\(实验\))?◇(.+)?\[(\d+(?:-\d+)?)周\](.+)/.exec(entry);
+        cell.childNodes.forEach(function(entry) {
+          if (entry.textContent.trim() == "")
+            return;
+          var match = /(.+?)(\(实验\))?◇(.+)?\[(\d+(?:-\d+)?)周\](.+)/.exec(entry.textContent.trim());
           if (match != null) {
             var c_name = match[1];
             var c_teacher = match[3]; if (c_teacher == null) { c_teacher = "无" }
@@ -101,8 +103,10 @@ function xskb_parse(doc, semester_begin_time, callback) {
     for (var row = 2; row <= 7; row++) {
       for (var col = 3; col <= 9; col++) {
         var cell = table.querySelector('tr:nth-child('+row+') > td:nth-child('+col+')');
-        cell.textContent.split('\n\t').forEach(function(entry) {
-          var match = /(.+?)(\(实验\))?◇(.+)?\[(\d+(?:-\d+)?)周\]◇(.+)/.exec(entry);
+        cell.childNodes.forEach(function(entry) {
+          if (entry.textContent.trim() == "")
+            return;
+          var match = /(.+?)(\(实验\))?◇(.+)?\[(\d+(?:-\d+)?)周\]◇(.+)/.exec(entry.textContent.trim());
           if (match != null) {
             var c_name = match[1];
             var c_teacher = match[3]; if (c_teacher == null) { c_teacher = "无" }
@@ -382,6 +386,7 @@ function insert_td_ics(node) {
   document.getElementById('ics_btn').addEventListener("click", parse_ics, false);
 }
 
+NodeList.prototype.forEach = Array.prototype.forEach;
 switch (document.URL) {
 case "http://jwts.hit.edu.cn/kbcx/queryXskb":
 case "http://jwts.hit.edu.cn/kbcx/queryGrkb":
